@@ -3,3 +3,6 @@ build:
 
 xcode:
 	swift package generate-xcodeproj --xcconfig-overrides settings.xcconfig
+
+install:
+	install .build/x86_64-apple-macosx/debug/bearc /usr/local/bin
