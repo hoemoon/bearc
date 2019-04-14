@@ -100,14 +100,15 @@ extension Note {
 		guard let content = replacedContent else {
 			fatalError()
 		}
-		var result = "```yaml\n"
+		var result = ""
 		if var encoded = encodedYaml() {
 			encoded[AttributeKey.id.rawValue] = Node(id)
 			encoded[AttributeKey.createdAt.rawValue] = Node(Extractor.dateFormatter.string(from: createdAt))
-			encoded[AttributeKey.createdAt.rawValue] = Node(Extractor.dateFormatter.string(from: modifiedAt))
+			encoded[AttributeKey.modifiedAt.rawValue] = Node(Extractor.dateFormatter.string(from: modifiedAt))
 			if let imageInfos = imageInfos {
 				encoded[AttributeKey.images.rawValue] = try Node(imageInfos.map { $0.0 })
 			}
+			result += "```yaml\n"
 			result += try Yams.serialize(node: encoded)
 			result += "```\n\n"
 		}
