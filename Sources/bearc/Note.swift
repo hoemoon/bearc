@@ -72,7 +72,7 @@ extension Note {
 			in: content,
 			options: [],
 			range: nsRange,
-			withTemplate: "![](\(id)$2)"
+			withTemplate: "![](\(id)-$2)"
 			).replacingOccurrences(
 				of: #"```yaml([\s\S]+)```"#,
 				with: "",
