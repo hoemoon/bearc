@@ -42,7 +42,10 @@ final class bearcTests: XCTestCase {
     }
 	
 	func testWithArguments() throws {
-		let result = try execute(with: ["--outputPath /Users/hoemoon/workspace/bearc/output --tag public"])
-		print(result)
+//		let result1 = try execute(with: ["--outputPath /Users/hoemoon/workspace/bearc/output --tag public"])
+//		print(result1)
+		
+		let result2 = try execute(with: ["-o /Users/hoemoon/workspace/bearc/output -t public"])
+		print(result2)
 	}
 }
