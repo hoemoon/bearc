@@ -27,6 +27,7 @@ public struct Extractor {
 			try saveAsMarkdown(for: note, to: destination)
 			try copyImages(for: note, to: destination)
 		}
+		print("\n\(notes.count) notes extracted.")
 	}
 	public init() {}
 }
@@ -39,7 +40,8 @@ extension Extractor {
 		guard let rows = try? db.prepare(Table("ZSFNOTE")) else {
 			fatalError("row prepare failed.")
 		}
-		return rows.compactMap { $0.notify(with: tags) }		
+		
+		return rows.compactMap { $0.notify(with: tags) }
 	}
 	
 	private func saveAsMarkdown(for note: Note, to destination: URL) throws {
@@ -57,6 +59,7 @@ extension Extractor {
 				try FileManager.default.removeItem(at: destinationURL)
 			}
 			try FileManager.default.copyItem(at: imageURL, to: destinationURL)
+			print(destinationURL.path)
 		}
 	}
 }

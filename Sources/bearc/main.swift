@@ -72,22 +72,46 @@ struct InputHandler {
 		return result
 	}
 	
+	private func convert(_ arguments: [String]) throws -> [String: String] {
+		var result = [String: String]()
+		let components = arguments.filter { $0.count != 0 }
+		for index in stride(from: 0, to: components.endIndex, by: 2) {
+			let keyString = components[index]
+				.replacingOccurrences(of: "-", with: "")
+			let value = components[index + 1]
+			guard let key = CommandKey(rawValue: keyString) else { throw BearcError.cannotConvert }
+			result[key.rawValue] = value
+		}
+		return result
+	}
+
+	
 	func main(_ arguments: [String]) {
+		let start = Date()
 		guard arguments.count > 1 else {
 			handleError(BearcError.cannotConvert)
 			return
 		}
-		let userInput = arguments[1]
-			.trimmingCharacters(in: .whitespacesAndNewlines)
 
+		if arguments.firstIndex(of: "help") != nil {
+			showManual()
+			return
+		}
+		
 		do {
-			let dict = try convert(userInput)
-			guard let tag = dict[CommandKey.tags.rawValue] else { throw BearcError.noTag }
+			let dict = try convert(Array(arguments[1..<arguments.endIndex]))
+			guard let tags = dict[CommandKey.tags.rawValue] else { throw BearcError.noTag }
 			guard let outputPath = dict[CommandKey.outputPath.rawValue] else { throw BearcError.noPath }
+			let components = tags
+				.trimmingCharacters(in: .whitespacesAndNewlines)
+				.components(separatedBy: ",").filter { $0.count > 0 }
+				.map { $0.trimmingCharacters(in: .whitespaces) }
 			try Extractor().execute(
-				with: [tag],
+				with: components,
 				into: URL(fileURLWithPath: outputPath)
 			)
+			let end = Date()
+			print(end.timeIntervalSince(start))
 		} catch {
 			handleError(error)
 			return

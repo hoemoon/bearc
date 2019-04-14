@@ -42,6 +42,7 @@ extension Note {
 			atomically: true,
 			encoding: .utf8
 		)
+		print(fileURL.path)
 	}
 	
 	var imageInfos: [ImageInfo]? {
