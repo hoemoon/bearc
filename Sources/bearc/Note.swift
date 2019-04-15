@@ -74,7 +74,7 @@ extension Note {
 			range: nsRange,
 			withTemplate: "![](\(id)-$2)"
 			).replacingOccurrences(
-				of: #"```yaml([\s\S]+)```"#,
+				of: #"```yaml([^`]+)```"#,
 				with: "",
 				options: .regularExpression
 			).replacingOccurrences(
@@ -87,7 +87,7 @@ extension Note {
 
 	private func encodedYaml() -> Yams.Node? {
 		let nsRange = NSRange(content.startIndex..<content.endIndex, in: content)
-		guard let regex = try? NSRegularExpression(pattern: #"```yaml([\s\S]+)```"#, options: []) else { return nil }
+		guard let regex = try? NSRegularExpression(pattern: #"```yaml([^`]+)```"#, options: []) else { return nil }
 		let raw = regex.matches(in: content, options: [], range: nsRange)
 			.compactMap { Range($0.range(at: 1), in: content) }
 			.map { String(content[$0]) }
